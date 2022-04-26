@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Login</title>
+        <link rel="stylesheet" href="style.css">
+        <style>
+            #d1
+            {
+                background-color:#f1f1f1
+            }
+        </style>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.5.2/dist/tf.min.js"></script>
+        <script>
+            async function isLoggedin()
+            {
+                const token = localStorage.getItem('token')
+                if(token===null)
+                {
+                    return false;
+                }
+                else 
+                {
+                    const result = await fetch('/api/approval',{
+                                                        method:"POST",
+                                                        headers:{
+                                                                'Content-Type':'application/json'
+                                                                },
+                                                            body:JSON.stringify({
+                                                                                token:localStorage.getItem('token')
+                                                                                })
+                                                            }).then((res)=>res.json())
+                    if(result.status==='ok')
+                    {
+                        return true;
+                    }
+                    else 
+                    {
+                        return false;
+                    }   
+                }
+                
+            }
+            $(document).ready(async function()
+                        {
+                            x = await isLoggedin()
+                            if(!x)
+                            {
+                                window.location.href = "./index.html"
+                                window.location.replace("./index.html")
+                            }
+                        })
+            function logout()
+            {
+                localStorage.clear()
+                window.location.href = "./index.html"
+                window.location.replace("./index.html")
+            }
+            function home()
+            {
+                window.location.href = "./Home.html"
+                window.location.replace("./Home.html")
+            }
+        </script>
+    </head>
+    <body>
+        <script src="script.js"></script>
+        <div id="secret">
+            <div class="container">
+                <label for="name">NAME:</label>
+                <br>
+                <input type="text" id="name" name="name">
+                <br><br>
+                <label for="income">INCOME:</label>
+                <br>
+                <input type="text" name="income" id="income">
+                <br><br>
+                <label for="children">NO OF CHILDREN:</label>
+                <br>
+                <input type="text" name="children" id="children">
+                <br><br>
+                <label for="category">GENDER:</label>
+                <br>
+                <input type="text" name="category" id="category">
+                <br><br>
+                <label for="car">CAR:</label>
+                <br>
+                <input type="text" name="car" id="car">
+                <br><br>
+                <label for="house">HOUSE:</label>
+                <br>
+                <input type="text" name="house" id="house">
+                <br><br>
+                <button id ="btn" type="submit" onclick="run()">SUBMIT</button>
+                <br><br>
+                <h1 id = "res"> </h1>
+                <button onclick="logout()">LOGOUT</button>
+                <button onclick="home()">HOME</button>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>User Registration</title>
+        <link rel="stylesheet" href="style.css">
+        <style>
+            #d1
+            {
+                background-color:#f1f1f1
+            }
+        </style>
+    </head>
+    <body>
+        <h1>REGISTRATION FORM</h1>
+        <form id="reg-form">
+            <div class="container">
+                <h1>Welcome to NEURABANK</h1>
+                <br><br>
+                <h1>REGISTER TO ENJOY OUR SERVICES</h1>
+                <br><br>
+                <label for="accno"><b>Account Number</b></label>
+                <input type="text" placeholder="Enter Account Number" name="accno" id="accno" required>
+                <label for="psw"><b>Password</b></label>
+                <input type="password" placeholder="Enter Password" name="password" id="password" required>
+                <button type="submit">Register</button>
+            </div>
+            <div class="container" id="d1">
+                <span class="psw">Already a User <a href="index.html">Login</a></span>
+            </div>
+        </form> 
+        <script>
+            const form = document.getElementById("reg-form");
+            form.addEventListener('submit',RegUser);
+            async function RegUser(event)
+            {
+                event.preventDefault();
+                const accno = document.getElementById("accno").value;
+                const password = document.getElementById("password").value;
+                const result = await fetch('/api/register',{
+                                                            method:"POST",
+                                                            headers:{
+                                                                    'Content-Type':'application/json'
+                                                                    },
+                                                            body:JSON.stringify({
+                                                                                    accno,
+                                                                                    password
+                                                                                })
+                                                            }).then((res)=>res.json())
+            
+                console.log(result)
+                if(result.status='ok')
+                {
+                    window.location.href = "./index.html"
+                    window.location.replace("./index.html");
+                }
+                else
+                {
+                    window.alert(result.error)
+                }
+            }
+        </script>
+    </body>
+</html>

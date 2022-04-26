@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Homepage-Neurabank</title>
+        <link rel="stylesheet" href="style.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.5.2/dist/tf.min.js"></script>
+        <script>
+            async function isLoggedin()
+            {
+                const token = localStorage.getItem('token')
+                if(token===null)
+                {
+                    return false;
+                }
+                else 
+                {
+                    const result = await fetch('/api/Home',{
+                                                        method:"POST",
+                                                        headers:{
+                                                                'Content-Type':'application/json'
+                                                                },
+                                                            body:JSON.stringify({
+                                                                                token:localStorage.getItem('token')
+                                                                                })
+                                                            }).then((res)=>res.json())
+                    if(result.status==='ok')
+                    {
+                        return true;
+                    }
+                    else 
+                    {
+                        return false;
+                    }   
+                }
+                
+            }
+            $(document).ready(async function()
+                        {
+                            x = await isLoggedin()
+                            if(!x)
+                            {
+                                window.location.href = "./index.html"
+                                window.location.replace("./index.html")
+                            }
+                        })
+            function logout()
+            {
+                localStorage.clear()
+                window.location.href = "./index.html"
+                window.location.replace("./index.html")
+            }
+        </script>
+    </head>
+    <body>
+        <div id="secret">
+            <div class="container" >
+                <h1>Welcome to NEURABANK</h1>
+                <a href="approval.html"><button type="submit">Credit Card Approval</button></a>
+                <button type="submit" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </body>
+</html>
